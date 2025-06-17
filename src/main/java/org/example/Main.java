@@ -12,9 +12,9 @@ public class Main {
      * @param b
      * @return The result of the division
      */
-    private static double divide(double a, double b) {
+    private static double divide(double a, double b) throws CustomDivideByZeroException {
         if (b == 0) {
-            throw new ArithmeticException("Division by zero");
+            throw new CustomDivideByZeroException("Cannot divide " + a + " by 0.", a, b);
         }
         return a / b;
     }
@@ -26,9 +26,13 @@ public class Main {
      * @param b The denominator
      * @return The result of the division
      */
-    public static double safeDivision(double a, double b) {
+    public static double safeDivision(double a, double b) throws ArithmeticException {
         // todo: Handle the unchecked ArithmeticException by returning 0.
-        return divide(a, b);
+        try {
+            return divide(a, b);
+        } catch (Exception e) {
+            return 0.0;
+        }
     }
 
     /**
@@ -38,12 +42,18 @@ public class Main {
      * @param logMessages List of log messages to add to
      * @return The second letter of the string
      */
-    public static String getSecondLetter(String s, List<String> logMessages) {
+    public static String getSecondLetter(String s, List<String> logMessages) throws StringIndexOutOfBoundsException {
         // TODO: Handle the StringIndexOutOfBoundsException by returning an empty string ("")
-        return s.substring(1, 2);
+        try {
+            return s.substring(1, 2);
+        } catch (Exception e) {
+            return "";
+        } finally {
+            logMessages.add("Exiting method");
+        }
 
         // TODO: This line needs to happen after the try/catch block, regardless of whether an exception is thrown (put it in a finally block)
-        logMessages.add("Exiting method");
+
     }
 
     /**
@@ -56,6 +66,10 @@ public class Main {
     public static double safeDivideWithCustomException(double a, double b) throws CustomDivideByZeroException {
         // TODO: handle divide by zero by throwing a CustomDivideByZeroException
         // TODO: Modify the custom exception to pass a,b to the constructor and store them in the exception (see CustomDivideByZeroException.java)
-        return divide(a, b);
+        try {
+            return divide(a, b);
+        } catch (Exception e) {
+            throw new CustomDivideByZeroException("Cannot divide " + a + " by 0.", a, b);
+        }
     }
 }
